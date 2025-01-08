@@ -12,12 +12,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Customer extends AggregateRoot<CustomerId> {
     private Account account;
-    private Card card;
+    private List<Card> cards = new ArrayList<>();
 
     public Customer() {
         super(new CustomerId());
@@ -38,12 +39,12 @@ public class Customer extends AggregateRoot<CustomerId> {
         this.account = account;
     }
 
-    public Card getCard() {
-        return card;
+    public List<Card> getCards() {
+        return cards;
     }
 
-    public void setCard(Card card) {
-        this.card = card;
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 
     public void createAccount(BigDecimal accountBalance, String accountNumber, String name, String accountType ) {

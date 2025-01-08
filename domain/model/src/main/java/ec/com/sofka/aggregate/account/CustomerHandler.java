@@ -51,7 +51,7 @@ public class CustomerHandler extends DomainActionsContainer {
                     AccountValue.of(event.getAccountValue())
 
             );
-            customer.setCard(card);
+            customer.getCards().add(card);
         });
     }
 }

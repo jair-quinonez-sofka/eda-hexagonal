@@ -7,4 +7,5 @@ public class GetCardByNumRequest extends Request {
     public GetCardByNumRequest(String aggregateId) {
         super(aggregateId);
     }
+
 }

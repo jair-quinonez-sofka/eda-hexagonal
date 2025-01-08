@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
@@ -72,11 +73,33 @@ public class AccountRouter {
                                     )
                             }
                     )
+            ),
+            @RouterOperation(
+            path = "/api/v1/account",
+            method = RequestMethod.GET,
+            operation = @Operation(
+                    tags = {"Accounts"},
+                    operationId = "get",
+                    summary = "Retrieve all accounts",
+                    description = "Retrieve all accounts in database",
+                    responses = {
+                            @ApiResponse(
+                                    responseCode = "200",
+                                    description = "Successfully retrieved all accounts",
+                                    content = @Content(mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = AccountReqDTO.class))
+
+                                    )
+                            ),
+                    }
             )
+    ),
     })
     public RouterFunction<ServerResponse> accountRoutes() {
         return RouterFunctions
-                .route(RequestPredicates.POST("/api/v1/account/create").and(accept(MediaType.APPLICATION_JSON)), this::createAccount);
+                .route(RequestPredicates.POST("/api/v1/account/create").and(accept(MediaType.APPLICATION_JSON)), this::createAccount)
+                .andRoute(RequestPredicates.GET("/api/v1/account"),this::getAllAccounts)
+                ;
     }
 
     public Mono<ServerResponse> createAccount(ServerRequest request) {
@@ -88,6 +111,18 @@ public class AccountRouter {
                         .contentType(MediaType.APPLICATION_JSON).bodyValue(accountDTO))
                 .onErrorResume(globalExceptionsHandler::handleException);
 
+    }
+
+    public Mono<ServerResponse> getAllAccounts(ServerRequest request) {
+
+        return accountHandler.getAllAccounts()
+                .collectList()
+                .flatMap(elements ->
+                        elements.isEmpty() ?
+                                ServerResponse.status(HttpStatus.NOT_FOUND).build()
+                                : ServerResponse.ok().body(Flux.fromIterable(elements), AccountReqDTO.class)
+
+                );
     }
 
 

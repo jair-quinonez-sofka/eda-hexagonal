@@ -20,21 +20,21 @@ import ec.com.sofka.request.GetCardByNumRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 public class CreateCardUseCase implements IUseCase<CardRequest, CardDTO> {
 
     private final IEventStore eventRepository;
     private final ICardRepository cardRepository;
     private final GetAccountByAccountNumberUseCase getAccountByAccountNumberUseCase;
-    private final GetCardByCardNumberUseCase getCardByCardNumberUseCase;
     private final GetCvvCardUseCase getCvvCardUseCase;
 
 
 
-    public CreateCardUseCase(IEventStore eventStore, ICardRepository cardRepository, GetAccountByAccountNumberUseCase getAccountByAccountNumberUseCase, GetCardByCardNumberUseCase getCardByCardNumberUseCase, GetCvvCardUseCase getCvvCardUseCase) {
+    public CreateCardUseCase(IEventStore eventStore, ICardRepository cardRepository, GetAccountByAccountNumberUseCase getAccountByAccountNumberUseCase, GetCvvCardUseCase getCvvCardUseCase) {
         this.eventRepository = eventStore;
         this.cardRepository = cardRepository;
         this.getAccountByAccountNumberUseCase = getAccountByAccountNumberUseCase;
-        this.getCardByCardNumberUseCase = getCardByCardNumberUseCase;
         this.getCvvCardUseCase = getCvvCardUseCase;
     }
 
@@ -45,49 +45,59 @@ public class CreateCardUseCase implements IUseCase<CardRequest, CardDTO> {
 
         return Customer.from(cmd.getCustomerId(), events)
                 .flatMap( customer -> {
-                    Card card = customer.getCard();
-                    if (card != null) {
-                        return cardRepository.findByCardNumber(card.getCardNumber().getValue())
-                                .flatMap(cardDTO -> Mono.error(new RuntimeException("Card already exists")));
-                    }
-                    return getAccountByAccountNumberUseCase.execute(new GetAccountRequest(
-                                    cmd.getCustomerId(), null, null, null
-                            ))
-                            .switchIfEmpty(Mono.error(new RuntimeException("Account does not exist")))
-                            .flatMap(accountResponse -> getCvvCardUseCase.apply()
-                                    .flatMap(cvv ->{
-                                        CardCreated cardCreated = new CardCreated(
-                                                cmd.getCardName(),
-                                                cmd.getCardNumber(),
-                                                cmd.getCardType(),
-                                                cmd.getCardStatus(),
-                                                cmd.getCardExpiryDate(),
-                                                cvv,
-                                                cmd.getCardLimit(),
-                                                cmd.getCardHolderName(),
-                                                accountResponse.getAccount()
-                                        );
-                                        customer.createCard(cardCreated);
+                    //Card card = customer.getCard();
+                    Optional<Card> optionalCard = customer.getCards().stream()
+                            .filter(cardRec -> cardRec.getCardNumber().getValue().equals(cmd.getCardNumber()))
+                            .findFirst();
 
-                                        CardDTO cardToSave = new CardDTO(
-                                                null,
-                                                customer.getCard().getCardName().getValue(),
-                                                customer.getCard().getCardNumber().getValue(),
-                                                customer.getCard().getCardType().getValue(),
-                                                customer.getCard().getCardStatus().getValue(),
-                                                customer.getCard().getCardExpiryDate().getValue(),
-                                                cvv,
-                                                customer.getCard().getCardLimit().getValue(),
-                                                customer.getCard().getCardHolderName().getValue(),
-                                                accountResponse.getAccountDTO()
-                                        );
-                                        return cardRepository.save(cardToSave);
-                                    }))
-                            .flatMap(savedCard -> Flux.fromIterable(customer.getUncommittedEvents())
-                                    .flatMap(eventRepository::save)
-                                    .then(Mono.just(savedCard))
-                            )
-                            .doOnSuccess(savedCard -> customer.markEventsAsCommitted());
+                    if (optionalCard.isPresent()) {
+                        return cardRepository.findByCardNumber(optionalCard.get().getCardNumber().getValue())
+                                .flatMap(cardDTO -> Mono.error(new RuntimeException("Card already exists")));
+                    } else {
+                        return getAccountByAccountNumberUseCase.execute(new GetAccountRequest(
+                                        cmd.getCustomerId(), null, null, null
+                                ))
+                                .switchIfEmpty(Mono.error(new RuntimeException("Account does not exist")))
+                                .flatMap(accountResponse -> getCvvCardUseCase.apply()
+                                        .flatMap(cvv -> {
+                                            CardCreated cardCreated = new CardCreated(
+                                                    cmd.getCardName(),
+                                                    cmd.getCardNumber(),
+                                                    cmd.getCardType(),
+                                                    cmd.getCardStatus(),
+                                                    cmd.getCardExpiryDate(),
+                                                    cvv,
+                                                    cmd.getCardLimit(),
+                                                    cmd.getCardHolderName(),
+                                                    accountResponse.getAccount()
+                                            );
+                                            customer.createCard(cardCreated);
+
+                                            Card cardFromCustomer = customer.getCards().stream()
+                                                    .filter(cardRec -> cardRec.getCardNumber().getValue().equals(cmd.getCardNumber()))
+                                                    .findFirst()
+                                                    .orElseThrow(() -> new RuntimeException("Getting creation failed in transaction"));
+
+                                            CardDTO cardToSave = new CardDTO(
+                                                    null,
+                                                    cardFromCustomer.getCardName().getValue(),
+                                                    cardFromCustomer.getCardNumber().getValue(),
+                                                    cardFromCustomer.getCardType().getValue(),
+                                                    cardFromCustomer.getCardStatus().getValue(),
+                                                    cardFromCustomer.getCardExpiryDate().getValue(),
+                                                    cvv,
+                                                    cardFromCustomer.getCardLimit().getValue(),
+                                                    cardFromCustomer.getCardHolderName().getValue(),
+                                                    accountResponse.getAccountDTO()
+                                            );
+                                            return cardRepository.save(cardToSave);
+                                        }))
+                                .flatMap(savedCard -> Flux.fromIterable(customer.getUncommittedEvents())
+                                        .flatMap(eventRepository::save)
+                                        .then(Mono.just(savedCard))
+                                )
+                                .doOnSuccess(savedCard -> customer.markEventsAsCommitted());
+                    }
 
                 });
 

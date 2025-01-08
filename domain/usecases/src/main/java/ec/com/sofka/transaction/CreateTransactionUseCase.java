@@ -227,7 +227,10 @@ public class CreateTransactionUseCase implements IUseCase<TransactionDTO, Transa
         return Customer.from(transactionDTO.getCustomerId(), events)
                 .flatMap(customer -> {
                     Account account = customer.getAccount();
-                    Card card = customer.getCard();
+                    Card card = customer.getCards().stream()
+                            .filter(cardRec -> cardRec.getCardNumber().getValue().equals(transactionDTO.getCard().getCardNumber()))
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("Getting card failed"));
                     if (account != null && card != null) {
                         return accountRepository.findByAccountNumber(account.getAccountNumber().getValue())
                                 .switchIfEmpty(Mono.error(new RuntimeException("Account not found")))

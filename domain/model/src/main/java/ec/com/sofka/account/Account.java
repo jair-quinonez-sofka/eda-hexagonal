@@ -1,6 +1,6 @@
 package ec.com.sofka.account;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import ec.com.sofka.account.values.AccountId;
 import ec.com.sofka.account.values.objects.AccountType;
 import ec.com.sofka.account.values.objects.Balance;

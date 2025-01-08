@@ -1,8 +1,7 @@
 package ec.com.sofka.aggregate.account.events;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import ec.com.sofka.account.Account;
-import ec.com.sofka.account.AccountDeserializer;
 import ec.com.sofka.generics.domain.DomainEvent;
 
 import java.math.BigDecimal;
