@@ -1,5 +1,6 @@
 package ec.com.sofka.card;
 
+import ec.com.sofka.Utils;
 import ec.com.sofka.account.GetAccountByAccountNumberUseCase;
 import ec.com.sofka.account.Account;
 import ec.com.sofka.account.values.AccountId;
@@ -21,30 +22,31 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class CreateCardUseCase implements IUseCase<CardRequest, CardDTO> {
 
     private final IEventStore eventRepository;
     private final ICardRepository cardRepository;
     private final GetAccountByAccountNumberUseCase getAccountByAccountNumberUseCase;
-    private final GetCvvCardUseCase getCvvCardUseCase;
 
 
 
-    public CreateCardUseCase(IEventStore eventStore, ICardRepository cardRepository, GetAccountByAccountNumberUseCase getAccountByAccountNumberUseCase, GetCvvCardUseCase getCvvCardUseCase) {
+
+    public CreateCardUseCase(IEventStore eventStore, ICardRepository cardRepository, GetAccountByAccountNumberUseCase getAccountByAccountNumberUseCase) {
         this.eventRepository = eventStore;
         this.cardRepository = cardRepository;
         this.getAccountByAccountNumberUseCase = getAccountByAccountNumberUseCase;
-        this.getCvvCardUseCase = getCvvCardUseCase;
+
     }
 
     @Override
     public Mono<CardDTO> execute(CardRequest cmd) {
         Flux<DomainEvent> events = eventRepository.findAggregate(cmd.getCustomerId());
-        System.out.println("CMDD " + cmd.getCardNumber() + " " + cmd.getAccount().getAccountNumber()+" "+ cmd.getAggregateId());
+        System.out.println("CMDD " + cmd.getCardNumber() + " " + cmd.getAccount().getAccountNumber() + " " + cmd.getAggregateId());
 
         return Customer.from(cmd.getCustomerId(), events)
-                .flatMap( customer -> {
+                .flatMap(customer -> {
                     //Card card = customer.getCard();
                     Optional<Card> optionalCard = customer.getCards().stream()
                             .filter(cardRec -> cardRec.getCardNumber().getValue().equals(cmd.getCardNumber()))
@@ -58,7 +60,7 @@ public class CreateCardUseCase implements IUseCase<CardRequest, CardDTO> {
                                         cmd.getCustomerId(), null, null, null
                                 ))
                                 .switchIfEmpty(Mono.error(new RuntimeException("Account does not exist")))
-                                .flatMap(accountResponse -> getCvvCardUseCase.apply()
+                                .flatMap(accountResponse -> getCvvCard()
                                         .flatMap(cvv -> {
                                             CardCreated cardCreated = new CardCreated(
                                                     cmd.getCardName(),
@@ -102,6 +104,20 @@ public class CreateCardUseCase implements IUseCase<CardRequest, CardDTO> {
                 });
 
 
-
     }
+
+    public Mono<String> getCvvCard() {
+        Supplier<String> cvvGenerator = Utils::generateCvvCode;
+
+        return Mono.defer(() -> Mono.just(cvvGenerator.get()))
+                .flatMap(cvv -> existsCvv(cvv)
+                        .flatMap(exists -> exists ? Mono.empty() : Mono.just(cvv)))
+                .repeat()
+                .next();
+    }
+    private Mono<Boolean> existsCvv(String cvv) {
+        return cardRepository.existsByCardCVV(cvv);
+    }
+
+
 }

@@ -2,9 +2,6 @@ package ec.com.sofka.gateway.dto;
 
 import java.math.BigDecimal;
 
-//This class is used to transfer data between the application and the database -
-// Notice how this affect the AccountRepository interface that lives in usecases
-//Notice also how this impacts on the driven adapter that implements the AccountRepository interface that lives in usecases.
 public class AccountDTO {
     private String id;
     private String accountNumber;
