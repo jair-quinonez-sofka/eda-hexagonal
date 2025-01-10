@@ -22,7 +22,7 @@ include ':helpers'
 findProject(':helpers').projectDir = file('./shared/helpers')
 
 
-//
+
 
 include ':rabbit-info-bus'
 findProject(':rabbit-info-bus').projectDir = file('./infrastructure/driven-adapters/rabbit-info-bus')
@@ -37,3 +37,9 @@ findProject(':rabbit-listener-bus').projectDir = file('./infrastructure/entry-po
 
 include ':rabbit-properties'
 findProject(':rabbit-properties').projectDir = file('./shared/rabbit-properties')
+
+include ':user'
+findProject(':user').projectDir = file('./domain/user')
+
+include ':security'
+findProject(':security').projectDir = file('./shared/security')

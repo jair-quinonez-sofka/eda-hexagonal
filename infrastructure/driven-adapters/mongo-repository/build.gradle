@@ -3,6 +3,7 @@ dependencies {
     implementation project(':model')
     implementation project (':serializer')
     implementation project (':helpers')
+    implementation project (':user')
 
 
 

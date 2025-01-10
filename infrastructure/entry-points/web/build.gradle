@@ -3,6 +3,7 @@ dependencies {
     implementation project(':model')
     implementation project(":mongo-repository")
     implementation project(":helpers")
+    implementation project(":user")
 
 
     implementation 'org.springframework.boot:spring-boot-starter'
