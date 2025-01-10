@@ -4,7 +4,6 @@ import ec.com.sofka.database.account.ICardMongoRepository;
 import ec.com.sofka.gateway.ICardRepository;
 import ec.com.sofka.gateway.dto.CardDTO;
 import ec.com.sofka.mapper.CardMapper;
-import ec.com.sofka.responses.CardResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Repository;

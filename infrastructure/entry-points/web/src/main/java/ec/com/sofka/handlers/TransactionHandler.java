@@ -3,7 +3,7 @@ package ec.com.sofka.handlers;
 
 import ec.com.sofka.data.TransactionReqDTO;
 import ec.com.sofka.mapper.TransactionDTOMapper;
-import ec.com.sofka.transaction.CreateTransactionUseCase;
+import ec.com.sofka.commands.usecases.CreateTransactionUseCase;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 

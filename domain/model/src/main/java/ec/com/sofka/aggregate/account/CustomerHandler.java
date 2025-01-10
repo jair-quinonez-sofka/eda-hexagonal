@@ -18,7 +18,7 @@ import ec.com.sofka.generics.domain.DomainActionsContainer;
 public class CustomerHandler extends DomainActionsContainer {
     public CustomerHandler(Customer customer) {
         addDomainActions((AccountCreated event) -> {
-            Account account = new Account(new AccountId(),
+            Account account = new Account(AccountId.of(event.getId()),
                     Balance.of(event.getAccountBalance()),
                     AccountNumber.of(event.getAccountNumber()),
                     OwnerName.of(event.getOwnerName()),
@@ -39,7 +39,7 @@ public class CustomerHandler extends DomainActionsContainer {
 
         addDomainActions((CardCreated event) -> {
             Card card = new Card(
-                    new CardId(),
+                    CardId.of(event.getId()),
                     CardName.of(event.getCardName()),
                     CardNumber.of(event.getCardNumber()),
                     CardType.of(event.getCardType()),

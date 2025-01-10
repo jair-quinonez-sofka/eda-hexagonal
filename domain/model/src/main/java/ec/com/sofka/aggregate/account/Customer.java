@@ -1,6 +1,7 @@
 package ec.com.sofka.aggregate.account;
 
 import ec.com.sofka.account.Account;
+import ec.com.sofka.account.values.AccountId;
 import ec.com.sofka.aggregate.account.events.AccountBalanceUpdated;
 import ec.com.sofka.aggregate.account.events.AccountCreated;
 import ec.com.sofka.aggregate.account.events.CardCreated;
@@ -48,7 +49,7 @@ public class Customer extends AggregateRoot<CustomerId> {
     }
 
     public void createAccount(BigDecimal accountBalance, String accountNumber, String name, String accountType ) {
-        addEvent(new AccountCreated(accountNumber,accountBalance, name, accountType)).apply();
+        addEvent(new AccountCreated( new AccountId().getValue(),accountNumber,accountBalance, name, accountType)).apply();
 
     }
 
@@ -68,6 +69,7 @@ public class Customer extends AggregateRoot<CustomerId> {
                 .concatMap(event -> Mono.just(event)
                         .doOnNext(e -> customer.addEvent(e).apply())
                 )
+                .doOnTerminate(customer::markEventsAsCommitted)
                 .then(Mono.just(customer));
     }
 

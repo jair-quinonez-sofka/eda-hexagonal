@@ -2,7 +2,7 @@ package ec.com.sofka.mapper;
 
 import ec.com.sofka.data.CardReqDTO;
 import ec.com.sofka.gateway.dto.CardDTO;
-import ec.com.sofka.request.CardRequest;
+import ec.com.sofka.commands.CardCommand;
 
 public class CardDTOMapper {
 
@@ -22,10 +22,10 @@ public class CardDTOMapper {
         );
     }
 
-    public static CardRequest toCardRequest(CardReqDTO cardDTO) {
+    public static CardCommand toCardRequest(CardReqDTO cardDTO) {
         if(cardDTO ==null) return null;
 
-        return new CardRequest(cardDTO.getCustomerId(),cardDTO.getCardName(),
+        return new CardCommand(cardDTO.getCustomerId(),cardDTO.getCardName(),
                 cardDTO.getCardNumber(), cardDTO.getCardType(), cardDTO.getCardStatus(),
                 cardDTO.getCardExpiryDate(), null, cardDTO.getCardLimit(),
                 cardDTO.getCardHolderName(), AccountDTOMapper.toAccountDTO(cardDTO.getAccount())

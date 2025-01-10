@@ -97,7 +97,7 @@ public class TransactionMapper {
             AtmTransactionDTO.class, transaction -> {
                 AtmTransactionDTO atmTransaction = (AtmTransactionDTO) transaction;
                 return new AtmTransactionEntity(
-                        null,
+                        transaction.getId(),
                         atmTransaction.getDescription(),
                         atmTransaction.getAmount(),
                         atmTransaction.getTransactionType(),
@@ -112,7 +112,7 @@ public class TransactionMapper {
             AccountDepositDTO.class, transaction -> {
                 AccountDepositDTO accountDeposit = (AccountDepositDTO) transaction;
                 return new AccountDepositEntity(
-                        null,
+                        transaction.getId(),
                         accountDeposit.getDescription(),
                         accountDeposit.getAmount(),
                         accountDeposit.getTransactionType(),
@@ -126,7 +126,7 @@ public class TransactionMapper {
             BranchDepositDTO.class, transaction -> {
                 BranchDepositDTO branchDepositDTO = (BranchDepositDTO) transaction;
                 return new BranchDepositEntity(
-                        null,
+                        transaction.getId(),
                         branchDepositDTO.getDescription(),
                         branchDepositDTO.getAmount(),
                         branchDepositDTO.getTransactionType(),
@@ -140,7 +140,7 @@ public class TransactionMapper {
             PaymentStoreDTO.class, transaction -> {
                 PaymentStoreDTO transactionDTO = (PaymentStoreDTO) transaction;
                 return new PaymentStoreTransactionEntity(
-                        null,
+                        transaction.getId(),
                         transactionDTO.getDescription(),
                         transactionDTO.getAmount(),
                         transactionDTO.getTransactionType(),
@@ -154,7 +154,7 @@ public class TransactionMapper {
             PaymentWebDTO.class, transaction -> {
                 PaymentWebDTO transactionDTO = (PaymentWebDTO) transaction;
                 return new PaymentWebTransactionEntity(
-                        null,
+                        transaction.getId(),
                         transactionDTO.getDescription(),
                         transactionDTO.getAmount(),
                         transactionDTO.getTransactionType(),
@@ -170,7 +170,7 @@ public class TransactionMapper {
 
     private static Function<TransactionDTO, TransactionEntity> defaultTransactionMapper() {
         return transaction -> new TransactionEntity(
-                null,
+                transaction.getId(),
                 transaction.getDescription(),
                 transaction.getAmount(),
                 transaction.getTransactionType(),

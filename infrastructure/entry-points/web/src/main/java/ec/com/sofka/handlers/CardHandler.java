@@ -1,10 +1,10 @@
 package ec.com.sofka.handlers;
 
-import ec.com.sofka.card.CreateCardUseCase;
-import ec.com.sofka.card.GetAllCardsUseCase;
+import ec.com.sofka.commands.usecases.CreateCardUseCase;
+import ec.com.sofka.queries.usecases.card.GetAllCardsUseCase;
 import ec.com.sofka.data.CardReqDTO;
 import ec.com.sofka.mapper.CardDTOMapper;
-import ec.com.sofka.request.GetCardByNumRequest;
+import ec.com.sofka.queries.query.GetCardByNumQuery;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,7 +26,11 @@ public class CardHandler {
     }
 
     public Flux<CardReqDTO> getCardsByAccountNumber(String customerId) {
-        return getAllCardsUseCase.execute(new GetCardByNumRequest(customerId))
-                .map(CardDTOMapper::toCardReqDTO);
+        return getAllCardsUseCase.get(new GetCardByNumQuery(customerId))
+                .flatMap(res ->
+                        Flux.fromIterable(res.getMultipleResults()
+                                .stream()
+                                .map(CardDTOMapper::toCardReqDTO)
+                                .toList()));
     }
 }

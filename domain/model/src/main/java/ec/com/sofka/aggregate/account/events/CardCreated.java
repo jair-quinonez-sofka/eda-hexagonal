@@ -7,6 +7,7 @@ import ec.com.sofka.generics.domain.DomainEvent;
 import java.math.BigDecimal;
 
 public class CardCreated extends DomainEvent {
+    private String id;
     private  String cardName;
     private  String cardNumber;
     private  String cardType;
@@ -18,8 +19,9 @@ public class CardCreated extends DomainEvent {
     private  Account accountValue;
 
 
-    public CardCreated(String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, Account accountValue) {
+    public CardCreated(String id, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, Account accountValue) {
         super(EventsEnum.CARD_CREATED.name());
+        this.id = id;
 
         this.cardName = cardName;
         this.cardNumber = cardNumber;
@@ -70,5 +72,9 @@ public class CardCreated extends DomainEvent {
 
     public BigDecimal getCardLimit() {
         return cardLimit;
+    }
+
+    public String getId() {
+        return id;
     }
 }

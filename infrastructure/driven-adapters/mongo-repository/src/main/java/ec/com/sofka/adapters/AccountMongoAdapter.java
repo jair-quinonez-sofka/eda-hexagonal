@@ -21,13 +21,6 @@ public class AccountMongoAdapter implements IAccountRepository {
         this.accountMongoTemplate = accountMongoTemplate;
     }
 
-    /*@Override
-    public AccountDTO findByAcccountId(String id) {
-        AccountEntity found = repository.findById(id).get();
-
-        return AccountMapper.toDTO(found);
-    }*/
-
     @Override
     public Mono<AccountDTO> findByAccountNumber(String accountNumber) {
         return accountMongoRepository.findByAccountNumber(accountNumber).map(AccountMapper::toDTO);

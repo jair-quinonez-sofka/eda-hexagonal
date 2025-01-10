@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class TransactionCreated extends DomainEvent {
+    private final String id;
     private final String description;
     private final BigDecimal amount;
     private final String transactionType;
@@ -28,8 +29,9 @@ public class TransactionCreated extends DomainEvent {
 
 
 
-    public TransactionCreated(String description, BigDecimal amount, String transactionType, BigDecimal transactionFee, LocalDateTime timestamp, Account accountValue, Card cardValue, String atmName, String operationType, Account accountReceiver, String marketName, String website, String branchName) {
+    public TransactionCreated(String id, String description, BigDecimal amount, String transactionType, BigDecimal transactionFee, LocalDateTime timestamp, Account accountValue, Card cardValue, String atmName, String operationType, Account accountReceiver, String marketName, String website, String branchName) {
         super(EventsEnum.TRANSACTION_CREATED.name());
+        this.id = id;
         this.description = description;
         this.amount = amount;
         this.transactionType = transactionType;
@@ -95,5 +97,9 @@ public class TransactionCreated extends DomainEvent {
 
     public String getBranchName() {
         return branchName;
+    }
+
+    public String getId() {
+        return id;
     }
 }

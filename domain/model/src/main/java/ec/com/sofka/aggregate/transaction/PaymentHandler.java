@@ -27,7 +27,7 @@ public class PaymentHandler<T extends Transaction> extends DomainActionsContaine
         return (T) switch (event.getTransactionType()) {
             case "ATM" ->
                 new AtmTransaction(
-                        new TransactionId(),
+                        TransactionId.of(event.getId()),
                         Description.of(event.getDescription()),
                         Amount.of(event.getAmount()),
                         TransactionType.of(event.getTransactionType()),
@@ -40,7 +40,7 @@ public class PaymentHandler<T extends Transaction> extends DomainActionsContaine
                         OperationType.of(event.getOperationType())
                 );
             case "BA" -> new AccountDeposit(
-                    new TransactionId(),
+                    TransactionId.of(event.getId()),
                     Description.of(event.getDescription()),
                     Amount.of(event.getAmount()),
                     TransactionType.of(event.getTransactionType()),
@@ -52,7 +52,7 @@ public class PaymentHandler<T extends Transaction> extends DomainActionsContaine
                     AccountValue.of(event.getAccountReceiver())
             );
             case "WP" -> new PaymentWebTransaction(
-                    new TransactionId(),
+                    TransactionId.of(event.getId()),
                     Description.of(event.getDescription()),
                     Amount.of(event.getAmount()),
                     TransactionType.of(event.getTransactionType()),
@@ -64,7 +64,7 @@ public class PaymentHandler<T extends Transaction> extends DomainActionsContaine
                     Website.of(event.getWebsite())
             );
             case "SP" -> new PaymentStoreTransaction(
-                    new TransactionId(),
+                    TransactionId.of(event.getId()),
                     Description.of(event.getDescription()),
                     Amount.of(event.getAmount()),
                     TransactionType.of(event.getTransactionType()),
@@ -76,7 +76,7 @@ public class PaymentHandler<T extends Transaction> extends DomainActionsContaine
                     MarketName.of(event.getMarketName())
             );
             case "BD" -> new BranchDeposit(
-                    new TransactionId(),
+                    TransactionId.of(event.getId()),
                     Description.of(event.getDescription()),
                     Amount.of(event.getAmount()),
                     TransactionType.of(event.getTransactionType()),

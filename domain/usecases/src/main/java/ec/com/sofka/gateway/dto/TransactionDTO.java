@@ -1,12 +1,13 @@
 package ec.com.sofka.gateway.dto;
 
 import ec.com.sofka.account.Account;
+import ec.com.sofka.generics.utils.Command;
 import ec.com.sofka.generics.utils.Request;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class TransactionDTO extends Request {
+public class TransactionDTO extends Command {
     private String id;
     private String customerId;
     private String description;

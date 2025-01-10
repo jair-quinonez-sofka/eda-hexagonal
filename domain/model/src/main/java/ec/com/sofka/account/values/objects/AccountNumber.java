@@ -20,6 +20,7 @@ public class AccountNumber implements IValueObject<String> {
     public String getValue() {
         return value;
     }
+
     private String validate(final String value){
         if(value == null){
             throw new IllegalArgumentException("The number can't be null");

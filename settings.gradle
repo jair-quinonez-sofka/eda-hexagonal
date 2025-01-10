@@ -20,3 +20,20 @@ findProject(':serializer').projectDir = file('./infrastructure/helpers/serialize
 
 include ':helpers'
 findProject(':helpers').projectDir = file('./shared/helpers')
+
+
+//
+
+include ':rabbit-info-bus'
+findProject(':rabbit-info-bus').projectDir = file('./infrastructure/driven-adapters/rabbit-info-bus')
+
+
+include 'app-logs'
+findProject(':app-logs').projectDir = file('./applications/app-logs')
+
+
+include ':rabbit-listener-bus'
+findProject(':rabbit-listener-bus').projectDir = file('./infrastructure/entry-points/rabbit-listener-bus')
+
+include ':rabbit-properties'
+findProject(':rabbit-properties').projectDir = file('./shared/rabbit-properties')
