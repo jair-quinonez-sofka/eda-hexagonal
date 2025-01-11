@@ -9,6 +9,8 @@ dependencies {
     implementation project (':web')
     implementation project (':serializer')
     implementation project (':security')
+    implementation project (':web-security')
+    implementation project (':helpers')
 
     implementation project (':rabbit-info-bus')
     implementation project(":rabbit-properties")

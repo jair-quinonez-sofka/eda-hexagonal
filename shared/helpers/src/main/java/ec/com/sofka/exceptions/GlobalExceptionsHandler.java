@@ -1,6 +1,7 @@
 package ec.com.sofka.exceptions;
 
 import ec.com.sofka.ErrorDetails;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,9 +17,12 @@ public class GlobalExceptionsHandler {
 
 
     public Mono<ServerResponse> handleException(Throwable ex) {
+        System.out.println(ex.getMessage());
         if (ex instanceof ValidationException) {
             return createErrorResponse(ex, HttpStatus.BAD_REQUEST, "SOME FIELD(s) IN THE REQUEST HAS ERROR");
-        } else if (ex instanceof RuntimeException) {
+        } if (ex instanceof ExpiredJwtException) {
+            return createErrorResponse(ex, HttpStatus.UNAUTHORIZED, "TOKEN EXPIRED");
+        }else if (ex instanceof RuntimeException) {
             return createErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, "WE JUST GOT A NEW ERROR");
         }
         return createErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");

@@ -43,3 +43,6 @@ findProject(':user').projectDir = file('./domain/user')
 
 include ':security'
 findProject(':security').projectDir = file('./shared/security')
+
+include ':web-security'
+findProject(':web-security').projectDir = file('./infrastructure/entry-points/web-security')

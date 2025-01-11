@@ -19,4 +19,5 @@ public class UserMongoAdapter implements IUserRepository {
     public Mono<UserDTO> save(UserDTO user) {
         return userRepository.save(UserMapper.toUser(user)).map(UserMapper::toUserDTO);
     }
+
 }

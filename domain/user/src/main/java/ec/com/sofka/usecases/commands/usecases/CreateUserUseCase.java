@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 public class CreateUserUseCase implements IUseCaseExecute<CreateUserCommand, CreateUserResponse> {
     private final IUserRepository userRepository;
 
+
     public CreateUserUseCase(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }

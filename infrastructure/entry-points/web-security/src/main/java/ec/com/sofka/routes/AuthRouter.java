@@ -1,13 +1,12 @@
 package ec.com.sofka.routes;
 
 import ec.com.sofka.ErrorDetails;
-import ec.com.sofka.data.AccountReqDTO;
-import ec.com.sofka.data.UserReqDTO;
+import ec.com.sofka.data.AuthRequest;
+import ec.com.sofka.data.CreateUserRequest;
 import ec.com.sofka.exceptions.BodyRequestValidator;
 import ec.com.sofka.exceptions.GlobalExceptionsHandler;
-import ec.com.sofka.handlers.UserHandler;
+import ec.com.sofka.handlers.AuthHandler;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -25,14 +24,13 @@ import reactor.core.publisher.Mono;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 @Configuration
-public class UserRouter {
-    private final UserHandler userHandler;
+public class AuthRouter {
+    private final AuthHandler authHandler;
     private final BodyRequestValidator bodyRequestValidator;
     private final GlobalExceptionsHandler globalExceptionsHandler;
 
-
-    public UserRouter(UserHandler userHandler, BodyRequestValidator bodyRequestValidator, GlobalExceptionsHandler globalExceptionsHandler) {
-        this.userHandler = userHandler;
+    public AuthRouter(AuthHandler authHandler, BodyRequestValidator bodyRequestValidator, GlobalExceptionsHandler globalExceptionsHandler) {
+        this.authHandler = authHandler;
         this.bodyRequestValidator = bodyRequestValidator;
         this.globalExceptionsHandler = globalExceptionsHandler;
     }
@@ -53,14 +51,14 @@ public class UserRouter {
                                     required = true,
                                     content = @Content(
                                             mediaType = "application/json",
-                                            schema = @Schema(implementation = UserReqDTO.class)
+                                            schema = @Schema(implementation = CreateUserRequest.class)
                                     )
                             ),
                             responses = {
                                     @ApiResponse(
                                             responseCode = "201",
                                             description = "User successfully created",
-                                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserReqDTO.class))
+                                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateUserRequest.class))
                                     ),
                                     @ApiResponse(
                                             responseCode = "400",
@@ -79,17 +77,29 @@ public class UserRouter {
     public RouterFunction<ServerResponse> userRoutes() {
         return RouterFunctions
                 .route(RequestPredicates.POST("/api/v1/user/create")
-                        .and(accept(MediaType.APPLICATION_JSON)), this::createUser);
+                        .and(accept(MediaType.APPLICATION_JSON)), this::createUser)
+                .andRoute(RequestPredicates.POST("/api/v1/user/authenticate")
+                        .and(accept(MediaType.APPLICATION_JSON)), this::login);
     }
 
 
     public Mono<ServerResponse> createUser(ServerRequest request) {
 
-        return request.bodyToMono(UserReqDTO.class)
+        return request.bodyToMono(CreateUserRequest.class)
                 .doOnNext(bodyRequestValidator::validate)
-                .flatMap(userHandler::createUser)
+                .flatMap(authHandler::createUser)
                 .flatMap(userDTO -> ServerResponse.status(HttpStatus.CREATED)
                         .contentType(MediaType.APPLICATION_JSON).bodyValue(userDTO))
+                .onErrorResume(globalExceptionsHandler::handleException);
+
+    }
+    public Mono<ServerResponse> login(ServerRequest request) {
+
+        return request.bodyToMono(AuthRequest.class)
+                .doOnNext(bodyRequestValidator::validate)
+                .flatMap(authHandler::authenticate)
+                .flatMap(authResponse -> ServerResponse.status(HttpStatus.CREATED)
+                        .contentType(MediaType.APPLICATION_JSON).bodyValue(authResponse))
                 .onErrorResume(globalExceptionsHandler::handleException);
 
     }

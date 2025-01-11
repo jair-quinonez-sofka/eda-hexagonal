@@ -1,4 +1,4 @@
-package ec.com.sofka;
+package ec.com.sofka.config;
 
 import ec.com.sofka.usecases.gateway.IPasswordHasher;
 import org.springframework.security.crypto.password.PasswordEncoder;

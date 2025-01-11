@@ -1,5 +1,6 @@
 package ec.com.sofka.mapper;
 
+import ec.com.sofka.data.ROLE;
 import ec.com.sofka.data.UserEntity;
 import ec.com.sofka.usecases.gateway.UserDTO;
 
@@ -9,7 +10,7 @@ public class UserMapper {
                 null,
                 dto.getUsername(),
                 dto.getPassword(),
-                dto.getRoles()
+                ROLE.valueOf(dto.getRoles())
         );
     }
 
@@ -18,7 +19,7 @@ public class UserMapper {
                 entity.getId(),
                 entity.getUsername(),
                 entity.getPassword(),
-                entity.getRoles()
+                entity.getRoles().name()
         );
     }
 }

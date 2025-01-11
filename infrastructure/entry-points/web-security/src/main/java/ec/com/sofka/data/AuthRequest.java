@@ -1,16 +1,12 @@
-package ec.com.sofka.usecases.gateway;
+package ec.com.sofka.data;
 
-public class UserDTO {
-    private String id;
+public class AuthRequest {
+
     private String username;
     private String password;
-    private String roles;
-
-    public UserDTO(String id, String username, String password, String roles) {
-        this.id = id;
+    public AuthRequest(String username, String password) {
         this.username = username;
         this.password = password;
-        this.roles = roles;
     }
 
     public String getUsername() {
@@ -28,17 +24,4 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
-    public String getId() {
-        return id;
-    }
 }
-
