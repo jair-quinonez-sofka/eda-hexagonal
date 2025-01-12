@@ -1,6 +1,6 @@
 package ec.com.sofka.gateway;
 
-import ec.com.sofka.gateway.dto.CardDTO;
+import ec.com.sofka.gateway.dto.card.CardDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

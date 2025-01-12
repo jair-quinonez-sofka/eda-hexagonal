@@ -1,11 +1,8 @@
-package ec.com.sofka.queries.usecases;
+package ec.com.sofka.queries.usecases.viewusecases;
 
-import ec.com.sofka.gateway.IAccountRepository;
 import ec.com.sofka.gateway.ICardRepository;
-import ec.com.sofka.gateway.dto.AccountDTO;
-import ec.com.sofka.gateway.dto.CardDTO;
+import ec.com.sofka.gateway.dto.card.CardDTO;
 import ec.com.sofka.generics.interfaces.IUseCaseAccept;
-import reactor.core.publisher.Mono;
 
 
 public class CardSavedViewUseCase implements IUseCaseAccept<CardDTO, Void> {

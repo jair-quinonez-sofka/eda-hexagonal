@@ -5,6 +5,7 @@ dependencies {
 
 
     implementation project(':user')
+    implementation project(':helpers')
     implementation project(':mongo-repository')
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'

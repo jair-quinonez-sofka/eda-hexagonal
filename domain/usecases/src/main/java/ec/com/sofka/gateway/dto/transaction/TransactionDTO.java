@@ -1,8 +1,8 @@
-package ec.com.sofka.gateway.dto;
+package ec.com.sofka.gateway.dto.transaction;
 
-import ec.com.sofka.account.Account;
+import ec.com.sofka.gateway.dto.account.AccountDTO;
+import ec.com.sofka.gateway.dto.card.CardDTO;
 import ec.com.sofka.generics.utils.Command;
-import ec.com.sofka.generics.utils.Request;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,6 +25,8 @@ public class TransactionDTO extends Command {
     public TransactionDTO(String id, String customerId, String description, BigDecimal amount, String transactionType, BigDecimal transactionFee, LocalDateTime timestamp, AccountDTO account, CardDTO card) {
         super(null);
         this.id = id;
+        this.customerId = customerId;
+
         this.description = description;
         this.amount = amount;
         this.transactionType = transactionType;
@@ -32,7 +34,6 @@ public class TransactionDTO extends Command {
         this.timestamp = timestamp;
         this.account = account;
         this.card = card;
-        this.customerId = customerId;
     }
 
     public String getId() {

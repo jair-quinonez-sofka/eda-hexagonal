@@ -1,7 +1,8 @@
 package ec.com.sofka.mapper;
 
+import ec.com.sofka.commands.transaction.*;
 import ec.com.sofka.data.TransactionReqDTO;
-import ec.com.sofka.gateway.dto.*;
+import ec.com.sofka.gateway.dto.transaction.*;
 
 public class TransactionDTOMapper {
     public static TransactionReqDTO toReqDTO(TransactionDTO transaction) {
@@ -101,6 +102,75 @@ public class TransactionDTOMapper {
                     null,
                     AccountDTOMapper.toAccountDTO(transactionReqDTO.getAccount()),
                     CardDTOMapper.toCardDTO(transactionReqDTO.getCard()),
+                    transactionReqDTO.getBranchName());
+            default -> throw new RuntimeException("Invalid transaction type");
+        };
+
+        return transaction;
+
+    }
+
+    public static TransactionCommand toTransactionCommand(TransactionReqDTO transactionReqDTO) {
+        if (transactionReqDTO == null) return null;
+        TransactionCommand transaction = null;
+        transaction = switch (transactionReqDTO.getTransactionType()) {
+            case "ATM" -> new AtmTransactionCommand(
+                    null,
+                    null,
+                    transactionReqDTO.getCustomerId(),
+                    transactionReqDTO.getDescription(),
+                    transactionReqDTO.getAmount(),
+                    transactionReqDTO.getTransactionType(),
+                    transactionReqDTO.getTransactionFee(),
+                    null,
+                    CardDTOMapper.toCardRequest(transactionReqDTO.getCard()),
+                    transactionReqDTO.getAtmName(),
+                    transactionReqDTO.getOperationType()
+            );
+            case "BA" -> new AccountDepositCommand(
+                    null,
+                    null,
+                    transactionReqDTO.getCustomerId(),
+                    transactionReqDTO.getDescription(),
+                    transactionReqDTO.getAmount(),
+                    transactionReqDTO.getTransactionType(),
+                    transactionReqDTO.getTransactionFee(),
+                    null,
+                    CardDTOMapper.toCardRequest(transactionReqDTO.getCard()),
+                    AccountDTOMapper.toAccountDTO(transactionReqDTO.getAccountReceiver()),
+                    transactionReqDTO.getReceiverCustomerId());
+            case "SP" -> new PaymentStoreCommand(
+                    null,
+                    null,
+                    transactionReqDTO.getCustomerId(),
+                    transactionReqDTO.getDescription(),
+                    transactionReqDTO.getAmount(),
+                    transactionReqDTO.getTransactionType(),
+                    transactionReqDTO.getTransactionFee(),
+                    null,
+                    CardDTOMapper.toCardRequest(transactionReqDTO.getCard()),
+                    transactionReqDTO.getMarketName());
+            case "WP" -> new PaymentWebCommand(
+                    null,
+                    null,
+                    transactionReqDTO.getCustomerId(),
+                    transactionReqDTO.getDescription(),
+                    transactionReqDTO.getAmount(),
+                    transactionReqDTO.getTransactionType(),
+                    transactionReqDTO.getTransactionFee(),
+                    null,
+                    CardDTOMapper.toCardRequest(transactionReqDTO.getCard()),
+                    transactionReqDTO.getWebsite());
+            case "BD" -> new BranchDepositCommand(
+                    null,
+                    null,
+                    transactionReqDTO.getCustomerId(),
+                    transactionReqDTO.getDescription(),
+                    transactionReqDTO.getAmount(),
+                    transactionReqDTO.getTransactionType(),
+                    transactionReqDTO.getTransactionFee(),
+                    null,
+                    CardDTOMapper.toCardRequest(transactionReqDTO.getCard()),
                     transactionReqDTO.getBranchName());
             default -> throw new RuntimeException("Invalid transaction type");
         };

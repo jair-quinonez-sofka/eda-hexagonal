@@ -1,11 +1,12 @@
 package ec.com.sofka.account.values.objects;
 
+
 import ec.com.sofka.generics.interfaces.IValueObject;
 
 public class AccountNumber implements IValueObject<String> {
     private  String value;
 
-    private AccountNumber(final String value) {
+    private AccountNumber(final String value)  {
         this.value = validate(value);
     }
 

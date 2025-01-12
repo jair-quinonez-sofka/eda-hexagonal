@@ -1,11 +1,11 @@
-package ec.com.sofka.commands;
+package ec.com.sofka.queries.responses.card;
 
-import ec.com.sofka.gateway.dto.AccountDTO;
-import ec.com.sofka.generics.utils.Command;
+import ec.com.sofka.queries.responses.account.CreateAccountResponse;
 
 import java.math.BigDecimal;
 
-public class CardCommand extends Command {
+public class CreateCardResponse {
+    private String id;
     private String customerId;
     private String cardName;
     private String cardNumber;
@@ -15,10 +15,10 @@ public class CardCommand extends Command {
     private String cardCVV;
     private BigDecimal cardLimit;
     private String cardHolderName;
-    private AccountDTO account;
+    private CreateAccountResponse account;
 
-    public CardCommand(String customerId, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, AccountDTO account) {
-        super(null);
+    public CreateCardResponse(String id, String customerId, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, CreateAccountResponse account) {
+        this.id = id;
         this.customerId = customerId;
         this.cardName = cardName;
         this.cardNumber = cardNumber;
@@ -29,6 +29,10 @@ public class CardCommand extends Command {
         this.cardLimit = cardLimit;
         this.cardHolderName = cardHolderName;
         this.account = account;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getCardName() {
@@ -63,7 +67,7 @@ public class CardCommand extends Command {
         return cardHolderName;
     }
 
-    public AccountDTO getAccount() {
+    public CreateAccountResponse getAccount() {
         return account;
     }
 

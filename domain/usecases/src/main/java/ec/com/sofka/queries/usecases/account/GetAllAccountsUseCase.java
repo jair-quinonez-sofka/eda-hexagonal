@@ -5,7 +5,7 @@ import ec.com.sofka.gateway.IEventStore;
 import ec.com.sofka.generics.domain.DomainEvent;
 import ec.com.sofka.generics.interfaces.IUseCaseGetEmpty;
 import ec.com.sofka.generics.utils.QueryResponse;
-import ec.com.sofka.queries.responses.CreateAccountResponse;
+import ec.com.sofka.queries.responses.account.CreateAccountResponse;
 import reactor.core.publisher.Flux;
 
 import java.util.Map;

@@ -1,7 +1,7 @@
 package ec.com.sofka.mapper;
 
 import ec.com.sofka.data.CardEntity;
-import ec.com.sofka.gateway.dto.CardDTO;
+import ec.com.sofka.gateway.dto.card.CardDTO;
 
 public class CardMapper {
 

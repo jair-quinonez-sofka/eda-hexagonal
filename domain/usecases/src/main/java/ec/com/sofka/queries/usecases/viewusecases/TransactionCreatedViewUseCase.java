@@ -1,7 +1,7 @@
-package ec.com.sofka.queries.usecases;
+package ec.com.sofka.queries.usecases.viewusecases;
 
 import ec.com.sofka.gateway.ITransactionRepository;
-import ec.com.sofka.gateway.dto.TransactionDTO;
+import ec.com.sofka.gateway.dto.transaction.TransactionDTO;
 import ec.com.sofka.generics.interfaces.IUseCaseAccept;
 
 public class TransactionCreatedViewUseCase implements IUseCaseAccept<TransactionDTO, Void> {

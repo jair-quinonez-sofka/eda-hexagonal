@@ -33,14 +33,18 @@ public class AccountReqDTO {
     @Schema(description = "Full name of the account owner. This field is mandatory.", example = "John Doe")
     private String accountOwner;
 
+    @Schema(hidden = true)
+    private  String customerId;
+
     public AccountReqDTO() {
     }
 
-    public AccountReqDTO(String accountNumber, BigDecimal accountBalance, String accountType, String accountOwner) {
+    public AccountReqDTO(String accountNumber, BigDecimal accountBalance, String accountType, String accountOwner, String customerId) {
         this.accountNumber = accountNumber;
         this.accountBalance = accountBalance;
         this.accountType = accountType;
         this.accountOwner = accountOwner;
+        this.customerId = customerId;
     }
 
     public String getAccountNumber() {
@@ -73,5 +77,9 @@ public class AccountReqDTO {
 
     public void setAccountOwner(String accountOwner) {
         this.accountOwner = accountOwner;
+    }
+
+    public String getCustomerId() {
+        return customerId;
     }
 }

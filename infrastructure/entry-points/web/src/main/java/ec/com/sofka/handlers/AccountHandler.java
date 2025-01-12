@@ -28,7 +28,7 @@ public class AccountHandler {
                         request.getAccountType()
                 )
         ).map(res -> new AccountReqDTO(res.getAccountNumber(),
-                res.getAccountBalance(), res.getAccountType(), res.getOwnerName()));
+                res.getAccountBalance(), res.getAccountType(), res.getOwnerName(), res.getCustomerId()));
     }
 
     public Flux<AccountReqDTO> getAllAccounts() {
@@ -42,7 +42,8 @@ public class AccountHandler {
                                                 createAccountResponse.getAccountNumber(),
                                                 createAccountResponse.getAccountBalance(),
                                                 createAccountResponse.getAccountType(),
-                                                createAccountResponse.getOwnerName()
+                                                createAccountResponse.getOwnerName(),
+                                                createAccountResponse.getCustomerId()
                                         )).toList()));
     }
 }

@@ -2,7 +2,7 @@ package ec.com.sofka.adapters;
 
 import ec.com.sofka.database.account.IAccountMongoRepository;
 import ec.com.sofka.gateway.IAccountRepository;
-import ec.com.sofka.gateway.dto.AccountDTO;
+import ec.com.sofka.gateway.dto.account.AccountDTO;
 import ec.com.sofka.mapper.AccountMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;

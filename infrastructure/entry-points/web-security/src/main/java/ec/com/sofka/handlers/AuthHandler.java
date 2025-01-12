@@ -37,13 +37,18 @@ public class AuthHandler {
     }
 
     public Mono<CreateUserRequest> createUser(CreateUserRequest userReqDTO) {
+        ROLE role = userReqDTO.getRoles().toLowerCase().contains("admin") ? ROLE.ADMIN: ROLE.USER;
+
         return createUserUseCase.execute(
                 new CreateUserCommand(
                         userReqDTO.getUsername(),
                         passwordEncoder.encode(userReqDTO.getPassword()),
-                        ROLE.ADMIN.name()
+                        role.name()
                 )
-        ).map(res -> new CreateUserRequest(res.getUsername(), res.getPassword(), res.getRoles()));
+        ).map(res ->
+                new CreateUserRequest(res.getUsername(),
+                        res.getPassword(),
+                        res.getRoles()));
     }
 
     public Mono<AuthResponse> authenticate(AuthRequest request) {

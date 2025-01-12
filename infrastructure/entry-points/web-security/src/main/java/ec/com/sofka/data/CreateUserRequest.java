@@ -15,6 +15,8 @@ public class CreateUserRequest {
     @Schema(description = "Password  for the user", example = "Abc123#*")
     private final String password;
 
+    @NotNull(message = "roles can not be null")
+    @Schema(description = "Role  for the user", example = "admin")
     private final String roles;
 
     public CreateUserRequest(String username, String password, String roles) {

@@ -20,4 +20,9 @@ public class UserMongoAdapter implements IUserRepository {
         return userRepository.save(UserMapper.toUser(user)).map(UserMapper::toUserDTO);
     }
 
+    @Override
+    public Mono<UserDTO> findByUsername(String username) {
+        return userRepository.findByUsername(username).map(UserMapper::toUserDTO);
+    }
+
 }

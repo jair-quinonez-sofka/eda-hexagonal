@@ -1,6 +1,14 @@
 package ec.com.sofka.filters;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ec.com.sofka.data.AuthErrorResponse;
+import ec.com.sofka.exceptions.GlobalExceptionsHandler;
 import ec.com.sofka.services.JWTService;
+import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -15,7 +23,8 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class JWTAuthFilter implements WebFilter {
-    private  final JWTService jwtService;
+    private final JWTService jwtService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public JWTAuthFilter(JWTService jwtService) {
         this.jwtService = jwtService;
@@ -31,41 +40,66 @@ public class JWTAuthFilter implements WebFilter {
                         .getHeaders()
                         .getFirst("Authorization");
         final String jwt;
-        final String userEmail;
+        final String username;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return filterChain.filter(exchange);
         }
 
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt);
+        try {
+            username = jwtService.extractUsername(jwt);
 
-        if(userEmail != null) {
-            var authoritiesClaims = jwtService.extractAllClaims(jwt).get("roles");
-            var authorities =
-                    authoritiesClaims != null ?
-                            AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaims.toString()) :
-                            AuthorityUtils.NO_AUTHORITIES;
+            if (username != null) {
+                var authoritiesClaims = jwtService.extractAllClaims(jwt).get("roles");
+                var authorities =
+                        authoritiesClaims != null ?
+                                AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_"+ authoritiesClaims) :
+                                AuthorityUtils.NO_AUTHORITIES;
+                System.out.println("authoritiesClaims "+authoritiesClaims);
 
-            UserDetails userDetails =
-                    User
-                            .withUsername(userEmail)
-                            .password("")
-                            .authorities(authorities)
-                            .build();
+                UserDetails userDetails =
+                        User
+                                .withUsername(username)
+                                .password("")
+                                .authorities(authorities)
+                                .build();
 
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                authorities);
-                return filterChain
-                        .filter(exchange)
-                        .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authToken));
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    authorities);
+                    return filterChain
+                            .filter(exchange)
+                            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authToken));
+                }
             }
+            return filterChain.filter(exchange);
+        } catch (ExpiredJwtException ex) {
+            return handleException(exchange, "The token has expired", "ACCESS_DENIED");
+        } catch (Exception ex) {
+            return handleException(exchange, "Authentication error", "ACCESS_DENIED");
         }
-        return filterChain
-                .filter(exchange);
+    }
+
+    private Mono<Void> handleException(ServerWebExchange exchange,
+                                       String errorMessage,
+                                       String error) {
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        AuthErrorResponse errorResponse = new AuthErrorResponse(error, errorMessage);
+        try {
+            byte[] bytes = objectMapper.writeValueAsBytes(errorResponse);
+            DataBuffer buffer = exchange.getResponse()
+                    .bufferFactory()
+                    .wrap(bytes);
+
+            return exchange.getResponse().writeWith(Mono.just(buffer));
+        } catch (Exception e) {
+            return Mono.error(new RuntimeException("Error writing response", e));
+        }
     }
 }

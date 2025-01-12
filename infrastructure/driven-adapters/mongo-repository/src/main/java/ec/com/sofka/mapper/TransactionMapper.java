@@ -1,7 +1,7 @@
 package ec.com.sofka.mapper;
 
 import ec.com.sofka.data.transaction.*;
-import ec.com.sofka.gateway.dto.*;
+import ec.com.sofka.gateway.dto.transaction.*;
 
 import java.util.Map;
 import java.util.function.Function;

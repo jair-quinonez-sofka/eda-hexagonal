@@ -1,4 +1,7 @@
-package ec.com.sofka.gateway.dto;
+package ec.com.sofka.gateway.dto.transaction;
+
+import ec.com.sofka.gateway.dto.account.AccountDTO;
+import ec.com.sofka.gateway.dto.card.CardDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

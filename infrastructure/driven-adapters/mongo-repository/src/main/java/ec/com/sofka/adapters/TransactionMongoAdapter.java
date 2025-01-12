@@ -3,7 +3,7 @@ package ec.com.sofka.adapters;
 
 import ec.com.sofka.database.account.ITransactionMongoRepository;
 import ec.com.sofka.gateway.ITransactionRepository;
-import ec.com.sofka.gateway.dto.TransactionDTO;
+import ec.com.sofka.gateway.dto.transaction.TransactionDTO;
 import ec.com.sofka.mapper.TransactionMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;

@@ -1,7 +1,7 @@
-package ec.com.sofka.queries.responses;
+package ec.com.sofka.queries.responses.card;
 
 import ec.com.sofka.card.Card;
-import ec.com.sofka.gateway.dto.CardDTO;
+import ec.com.sofka.gateway.dto.card.CardDTO;
 
 public class GetCardByNumResponse {
     private Card card;

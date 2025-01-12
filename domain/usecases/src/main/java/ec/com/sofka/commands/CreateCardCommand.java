@@ -1,11 +1,11 @@
-package ec.com.sofka.gateway.dto;
+package ec.com.sofka.commands;
 
-import ec.com.sofka.generics.utils.Request;
+import ec.com.sofka.gateway.dto.account.AccountDTO;
+import ec.com.sofka.generics.utils.Command;
 
 import java.math.BigDecimal;
 
-public class CardDTO {
-    private String id;
+public class CreateCardCommand extends Command {
     private String customerId;
     private String cardName;
     private String cardNumber;
@@ -17,7 +17,8 @@ public class CardDTO {
     private String cardHolderName;
     private AccountDTO account;
 
-    public CardDTO( String customerId, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, AccountDTO account) {
+    public CreateCardCommand(String customerId, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, AccountDTO account) {
+        super(null);
         this.customerId = customerId;
         this.cardName = cardName;
         this.cardNumber = cardNumber;
@@ -28,26 +29,6 @@ public class CardDTO {
         this.cardLimit = cardLimit;
         this.cardHolderName = cardHolderName;
         this.account = account;
-    }
-
-    public CardDTO(String  id, String customerId, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, AccountDTO account) {
-
-        this.id = id;
-        this.customerId = customerId;
-        this.cardName = cardName;
-        this.cardNumber = cardNumber;
-        this.cardType = cardType;
-        this.cardStatus = cardStatus;
-        this.cardExpiryDate = cardExpiryDate;
-        this.cardCVV = cardCVV;
-        this.cardLimit = cardLimit;
-        this.cardHolderName = cardHolderName;
-        this.account = account;
-    }
-
-
-    public String getId() {
-        return id;
     }
 
     public String getCardName() {
@@ -84,14 +65,6 @@ public class CardDTO {
 
     public AccountDTO getAccount() {
         return account;
-    }
-
-    public void setAccount(AccountDTO account) {
-        this.account = account;
-    }
-
-    public void setCardCVV(String cardCVV) {
-        this.cardCVV = cardCVV;
     }
 
     public String getCustomerId() {

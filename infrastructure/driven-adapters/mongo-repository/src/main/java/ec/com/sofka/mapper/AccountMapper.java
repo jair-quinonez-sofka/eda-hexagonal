@@ -1,7 +1,7 @@
 package ec.com.sofka.mapper;
 
 import ec.com.sofka.data.AccountEntity;
-import ec.com.sofka.gateway.dto.AccountDTO;
+import ec.com.sofka.gateway.dto.account.AccountDTO;
 
 public class AccountMapper {
     public static AccountEntity toEntity(AccountDTO accountDTO) {

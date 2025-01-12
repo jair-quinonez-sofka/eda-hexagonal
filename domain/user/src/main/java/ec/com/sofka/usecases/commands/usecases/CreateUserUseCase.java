@@ -19,15 +19,21 @@ public class CreateUserUseCase implements IUseCaseExecute<CreateUserCommand, Cre
 
     @Override
     public Mono<CreateUserResponse> execute(CreateUserCommand request) {
-        return userRepository.save(
-                        new UserDTO(null,
-                                request.getUsername(),
-                                request.getPassword(),
-                                request.getRoles()))
-                .map(u -> new CreateUserResponse(
-                        u.getUsername(),
-                        u.getPassword(),
-                        u.getRoles()));
-
+        return userRepository.findByUsername(request.getUsername())
+                .hasElement()
+                .flatMap(element -> {
+                    if (element) {
+                        return Mono.error(new RuntimeException("User already exists"));
+                    }
+                    return userRepository.save(
+                                    new UserDTO(null,
+                                            request.getUsername(),
+                                            request.getPassword(),
+                                            request.getRoles()))
+                            .map(u -> new CreateUserResponse(
+                                    u.getUsername(),
+                                    u.getPassword(),
+                                    u.getRoles()));
+                });
     }
 }

@@ -1,4 +1,4 @@
-package ec.com.sofka.gateway.dto;
+package ec.com.sofka.gateway.dto.account;
 
 import java.math.BigDecimal;
 

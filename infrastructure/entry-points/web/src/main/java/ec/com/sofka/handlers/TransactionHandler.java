@@ -16,7 +16,7 @@ public class TransactionHandler {
     }
 
     public Mono<TransactionReqDTO> createTransaction(TransactionReqDTO transactionDTO) {
-        return createTransactionUseCase.execute(TransactionDTOMapper.toTransactionDTO(transactionDTO))
+        return createTransactionUseCase.execute(TransactionDTOMapper.toTransactionCommand(transactionDTO))
                 .doOnSuccess(transactionDTO1 -> System.out.println("HERE IS " + transactionDTO1.getDescription()))
                 .map(TransactionDTOMapper::toReqDTO);
     }

@@ -5,18 +5,18 @@ import ec.com.sofka.account.Account;
 import ec.com.sofka.aggregate.account.events.AccountBalanceUpdated;
 import ec.com.sofka.aggregate.account.events.AccountCreated;
 import ec.com.sofka.aggregate.account.events.CardCreated;
-import ec.com.sofka.aggregate.account.events.EventsEnum;
 import ec.com.sofka.aggregate.transaction.events.TransactionCreated;
 import ec.com.sofka.card.Card;
 import ec.com.sofka.gateway.BusEventListener;
-import ec.com.sofka.gateway.dto.*;
+import ec.com.sofka.gateway.dto.account.AccountDTO;
+import ec.com.sofka.gateway.dto.card.CardDTO;
+import ec.com.sofka.gateway.dto.transaction.*;
 import ec.com.sofka.generics.domain.DomainEvent;
-import ec.com.sofka.queries.usecases.AccountSavedViewUseCase;
-import ec.com.sofka.queries.usecases.CardSavedViewUseCase;
-import ec.com.sofka.queries.usecases.TransactionCreatedViewUseCase;
+import ec.com.sofka.queries.usecases.viewusecases.AccountSavedViewUseCase;
+import ec.com.sofka.queries.usecases.viewusecases.CardSavedViewUseCase;
+import ec.com.sofka.queries.usecases.viewusecases.TransactionCreatedViewUseCase;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 
 @Service
@@ -126,7 +126,7 @@ public class BusListener implements BusEventListener {
         );
     }
 
-    public  TransactionDTO constructDTO(TransactionCreated transactionCreated) {
+    public TransactionDTO constructDTO(TransactionCreated transactionCreated) {
         return switch (transactionCreated.getTransactionType()) {
             case ConstansTrType.ATM -> {
                 yield new AtmTransactionDTO(

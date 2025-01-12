@@ -1,15 +1,16 @@
 package ec.com.sofka.mapper;
 
 import ec.com.sofka.data.CardReqDTO;
-import ec.com.sofka.gateway.dto.CardDTO;
-import ec.com.sofka.commands.CardCommand;
+import ec.com.sofka.gateway.dto.card.CardDTO;
+import ec.com.sofka.commands.CreateCardCommand;
+import ec.com.sofka.queries.responses.card.CreateCardResponse;
 
 public class CardDTOMapper {
 
-    public static CardReqDTO toCardReqDTO(CardDTO card) {
+    public static CardReqDTO toCardReqDTO(CreateCardResponse card) {
         return  new CardReqDTO(card.getCustomerId(), card.getCardName(), card.getCardNumber(), card.getCardType(), card.getCardStatus(),
                 card.getCardExpiryDate(), card.getCardLimit(),
-                card.getCardHolderName(), AccountDTOMapper.toAccountReqDTO(card.getAccount())
+                card.getCardHolderName(), AccountDTOMapper.fromCtoAccountReqDTO(card.getAccount())
         );
     }
 
@@ -22,10 +23,10 @@ public class CardDTOMapper {
         );
     }
 
-    public static CardCommand toCardRequest(CardReqDTO cardDTO) {
+    public static CreateCardCommand toCardRequest(CardReqDTO cardDTO) {
         if(cardDTO ==null) return null;
 
-        return new CardCommand(cardDTO.getCustomerId(),cardDTO.getCardName(),
+        return new CreateCardCommand(cardDTO.getCustomerId(),cardDTO.getCardName(),
                 cardDTO.getCardNumber(), cardDTO.getCardType(), cardDTO.getCardStatus(),
                 cardDTO.getCardExpiryDate(), null, cardDTO.getCardLimit(),
                 cardDTO.getCardHolderName(), AccountDTOMapper.toAccountDTO(cardDTO.getAccount())
