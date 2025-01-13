@@ -130,7 +130,7 @@ public class CardRouter {
 
         return request.bodyToMono(AccountSimpleRequestDTO.class)
                 .doOnNext(bodyRequestValidator::validate)
-                .flatMap(re  -> cardHandler.getCardsByAccountNumber(re.getCustomerId())
+                .flatMap(re  -> cardHandler.getCardsByAccountNumber(re.getAccountNumber())
                         .collectList()
                         .flatMap(cards -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).bodyValue(cards)))
                 .onErrorResume(globalExceptionsHandler::handleException);

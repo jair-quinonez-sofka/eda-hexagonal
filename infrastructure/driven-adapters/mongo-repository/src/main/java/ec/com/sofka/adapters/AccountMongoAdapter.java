@@ -28,7 +28,7 @@ public class AccountMongoAdapter implements IAccountRepository {
 
     @Override
     public Flux<AccountDTO> findAllAccounts() {
-        return null;
+        return accountMongoRepository.findAll().map(AccountMapper::toDTO);
     }
 
     @Override

@@ -9,6 +9,8 @@ public class AccountDTO {
     private BigDecimal balance;
     private String accountType;
 
+    public AccountDTO() {
+    }
 
     public AccountDTO(BigDecimal balance, String ownerName, String accountNumber, String accountType) {
         this.balance = balance;
@@ -47,6 +49,14 @@ public class AccountDTO {
 
     public String getAccountType() {
         return accountType;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setBalance(BigDecimal balance) {

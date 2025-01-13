@@ -65,7 +65,7 @@ public class JWTService {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(null, null, "Token expired Service", e); // Lanzamos una excepción más controlada
+            throw new ExpiredJwtException(null, null, "Token expired Service", e);
         } catch (Exception e) {
             throw new RuntimeException("JWT Error", e);
         }

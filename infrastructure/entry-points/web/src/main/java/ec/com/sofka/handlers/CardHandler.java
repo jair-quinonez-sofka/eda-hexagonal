@@ -25,8 +25,8 @@ public class CardHandler {
         return createCardUseCase.execute(CardDTOMapper.toCardRequest(request)).map(CardDTOMapper::toCardReqDTO);
     }
 
-    public Flux<CardReqDTO> getCardsByAccountNumber(String customerId) {
-        return getAllCardsUseCase.get(new GetCardByNumQuery(customerId))
+    public Flux<CardReqDTO> getCardsByAccountNumber(String accountNumber) {
+        return getAllCardsUseCase.get(new GetCardByNumQuery(null, accountNumber))
                 .flatMap(res ->
                         Flux.fromIterable(res.getMultipleResults()
                                 .stream()

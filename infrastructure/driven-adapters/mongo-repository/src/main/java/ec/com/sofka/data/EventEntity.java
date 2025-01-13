@@ -43,6 +43,9 @@ public class EventEntity {
         this.aggregateRootName = aggregateRootName;
     }
 
+    public EventEntity() {
+    }
+
     public String getId() {
         return id;
     }

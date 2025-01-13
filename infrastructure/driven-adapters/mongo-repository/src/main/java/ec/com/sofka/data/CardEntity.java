@@ -40,6 +40,10 @@ public class CardEntity {
     @Field(name = "account")
     private AccountEntity account;
 
+    public CardEntity() {
+
+    }
+
     public CardEntity(String id, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, AccountEntity account) {
         this.id = id;
         this.cardName = cardName;

@@ -17,7 +17,10 @@ public class CardDTO {
     private String cardHolderName;
     private AccountDTO account;
 
-    public CardDTO( String customerId, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, AccountDTO account) {
+    public CardDTO() {
+    }
+
+    public CardDTO(String customerId, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, String cardCVV, BigDecimal cardLimit, String cardHolderName, AccountDTO account) {
         this.customerId = customerId;
         this.cardName = cardName;
         this.cardNumber = cardNumber;
@@ -96,5 +99,9 @@ public class CardDTO {
 
     public String getCustomerId() {
         return customerId;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 }

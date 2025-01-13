@@ -51,6 +51,9 @@ public class CardReqDTO {
     @NotNull(message = "account" + ConstansTrType.NOT_NULL_FIELD)
     private AccountReqDTO account;
 
+    public CardReqDTO() {
+    }
+
     public CardReqDTO(String customerId, String cardName, String cardNumber, String cardType, String cardStatus, String cardExpiryDate, BigDecimal cardLimit, String cardHolderName, AccountReqDTO account) {
         this.customerId = customerId;
         this.cardName = cardName;

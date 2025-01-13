@@ -100,6 +100,7 @@ public class BusListener implements BusEventListener {
     }
 
    public AccountDTO  toAccountDTO(Account account) {
+        if(account == null) return null;
        return new AccountDTO(
                account.getId().getValue(),
                account.getBalance().getValue(),
@@ -110,6 +111,7 @@ public class BusListener implements BusEventListener {
    }
 
     public CardDTO  toCardDTO(Card card) {
+        if(card == null) return null;
         return new CardDTO(
                 card.getId().getValue(),
                 null,

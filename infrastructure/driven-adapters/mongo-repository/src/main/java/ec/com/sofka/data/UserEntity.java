@@ -25,6 +25,9 @@ public class UserEntity implements UserDetails {
         this.roles = roles;
     }
 
+    public UserEntity() {
+
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -67,5 +70,9 @@ public class UserEntity implements UserDetails {
 
     public String getId() {
         return id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
