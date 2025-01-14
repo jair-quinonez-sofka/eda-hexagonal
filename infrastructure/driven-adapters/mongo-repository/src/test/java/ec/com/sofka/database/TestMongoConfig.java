@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 public class TestMongoConfig {
     @Bean
     public MongoClient reactiveMongoClient() {
-        return MongoClients.create("mongodb://localhost:27017/test"); // Cambia el URI según tu configuración
+        return MongoClients.create("mongodb://localhost:27017/test");
     }
 
     @Bean

@@ -23,7 +23,7 @@ public class JWTExpiredErrorHandler implements ServerAuthenticationEntryPoint {
         AuthErrorResponse errorResponse =
                 new AuthErrorResponse("Access Denied","The token has expired");
 
-        return Mono.fromCallable(() -> objectMapper.writeValueAsString(errorResponse)) // Convertir el objeto en JSON
+        return Mono.fromCallable(() -> objectMapper.writeValueAsString(errorResponse))
                 .flatMap(json -> exchange.getResponse()
                         .writeWith(Mono.just(exchange.getResponse()
                                 .bufferFactory()
