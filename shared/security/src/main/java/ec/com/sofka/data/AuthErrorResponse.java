@@ -1,8 +1,11 @@
 package ec.com.sofka.data;
 
 public class AuthErrorResponse {
-    private final String error;
-    private final String message;
+    private  String error;
+    private  String message;
+
+    public AuthErrorResponse() {
+    }
 
     public AuthErrorResponse(String error, String message) {
         this.error = error;

@@ -23,14 +23,10 @@ import java.time.LocalDateTime;
 public class CreateTransactionUseCase implements IUseCaseExecute<TransactionCommand, TransactionDTO> {
 
     private final IEventStore eventRepository;
-    private final IAccountRepository accountRepository;
-    private final ICardRepository cardRepository;
     private final BusEvent busEvent;
 
-    public CreateTransactionUseCase(IEventStore eventRepository, IAccountRepository accountRepository, ICardRepository cardRepository, BusEvent busEvent) {
+    public CreateTransactionUseCase(IEventStore eventRepository, BusEvent busEvent) {
         this.eventRepository = eventRepository;
-        this.accountRepository = accountRepository;
-        this.cardRepository = cardRepository;
         this.busEvent = busEvent;
     }
 

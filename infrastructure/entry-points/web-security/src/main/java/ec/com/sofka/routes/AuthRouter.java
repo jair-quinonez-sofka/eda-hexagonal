@@ -98,7 +98,7 @@ public class AuthRouter {
         return request.bodyToMono(AuthRequest.class)
                 .doOnNext(bodyRequestValidator::validate)
                 .flatMap(authHandler::authenticate)
-                .flatMap(authResponse -> ServerResponse.status(HttpStatus.CREATED)
+                .flatMap(authResponse -> ServerResponse.status(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON).bodyValue(authResponse))
                 .onErrorResume(globalExceptionsHandler::handleException);
 

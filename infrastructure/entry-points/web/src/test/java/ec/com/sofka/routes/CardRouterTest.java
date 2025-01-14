@@ -101,7 +101,7 @@ class CardRouterTest {
                 BigDecimal.valueOf(1000), "TEST HOLDER",
                 accountDTO
         );
-        AccountSimpleRequestDTO accountDTO2 = new AccountSimpleRequestDTO("cus");
+        AccountSimpleRequestDTO accountDTO2 = new AccountSimpleRequestDTO("cus", "123456789");
         //accountDTO2.setAccountNumber("123456");
 
 

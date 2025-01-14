@@ -1,6 +1,7 @@
 package ec.com.sofka.data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "Request body for creating an user")
@@ -8,10 +9,12 @@ public class CreateUserRequest {
 
 
     @NotNull(message = "username can not be null")
+    @NotBlank(message = "username can not be empty")
     @Schema(description = "Unique username assigned to the user", example = "testUser")
     private final String username;
 
     @NotNull(message = "password name can not be null")
+    @NotBlank(message = "password can not be empty")
     @Schema(description = "Password  for the user", example = "Abc123#*")
     private final String password;
 
